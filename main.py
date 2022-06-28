@@ -1,4 +1,5 @@
 import traceback
+from types import NoneType
 from webbrowser import get
 from bs4 import BeautifulSoup
 import requests
@@ -59,7 +60,7 @@ if selenium:
             try:
                 name = data.find_element(By.TAG_NAME, 'p').text.strip()
                 rev_links = (data.get_attribute('href'))
-            except NoSuchElementException:
+            except TypeError:
                 name = "N/A"
                 rev_links = "N/A"
             
@@ -68,7 +69,7 @@ if selenium:
 
             try:
                 tots_reviews = dealers_reviews[-1].text.strip().split("|")[-1]
-            except NoSuchElementException:
+            except TypeError:
                 tots_reviews = "N/A"
             
 
@@ -77,18 +78,20 @@ if selenium:
             for deal in dealers_ratings_data:
                 try:
                     sta_logo = deal.find_element(By.TAG_NAME, 'img').get_attribute('src')
-                except NoSuchElementException:
+                except TypeError:
                     sta_logo = "N/A"
                
                 # star_text = deal.find_element(By.TAG_NAME, 'img').get_attribute('alt')
 
                 try:
                     deals_trustscores = deal.find_element(By.CLASS_NAME, 'styles_desktop__3N0-b').text.strip()
-                except NoSuchElementException:
+                except TypeError:
                     deals_trustscores = "N/A"
                 
                 return name, rev_links, tots_reviews, sta_logo, deals_trustscores
         
+
+    winsound.PlaySound('notification.mp3', winsound.SND_FILENAME)
 
     for link in url_lists:
         trust_datas = automation(link)
@@ -111,9 +114,9 @@ if selenium:
     print(len(star_logo))
     print(len(dealers_trustscores))
     print(len(review_links))
-
     winsound.PlaySound('notification.mp3', winsound.SND_FILENAME)
 
+    
     d = {"Dealer's Name": dealers_name,
          "Trustscores": dealers_trustscores,
          "Stars": star_logo,
