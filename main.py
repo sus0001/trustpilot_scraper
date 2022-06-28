@@ -50,7 +50,13 @@ if selenium:
         url_lists.append(url)
 
 
-    def automation(urls):       
+    def automation(urls):
+        names = []
+        revs = []
+        tots = []
+        stas = []
+        deals = []
+
         driver.maximize_window()
         driver.get(urls)
 
@@ -63,7 +69,8 @@ if selenium:
             except TypeError:
                 name = "N/A"
                 rev_links = "N/A"
-            
+            names.append(name)
+            revs.append(rev_links)
 
             dealers_reviews = data.find_elements(By.TAG_NAME, 'p')
 
@@ -71,6 +78,7 @@ if selenium:
                 tots_reviews = dealers_reviews[-1].text.strip().split("|")[-1]
             except TypeError:
                 tots_reviews = "N/A"
+            tots.append(tots_reviews)
             
 
             dealers_ratings_data = data.find_elements(By.CLASS_NAME, 'styles_rating__2FRLX')
@@ -80,6 +88,7 @@ if selenium:
                     sta_logo = deal.find_element(By.TAG_NAME, 'img').get_attribute('src')
                 except TypeError:
                     sta_logo = "N/A"
+                stas.append(sta_logo)
                
                 # star_text = deal.find_element(By.TAG_NAME, 'img').get_attribute('alt')
 
@@ -87,9 +96,9 @@ if selenium:
                     deals_trustscores = deal.find_element(By.CLASS_NAME, 'styles_desktop__3N0-b').text.strip()
                 except TypeError:
                     deals_trustscores = "N/A"
+                deals.append(dealers_trustscores)
                 
-                return name, rev_links, tots_reviews, sta_logo, deals_trustscores
-        
+                return names, revs, tots, stas, deals
 
     winsound.PlaySound('notification.mp3', winsound.SND_FILENAME)
 
